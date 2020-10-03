@@ -20,6 +20,14 @@ class Perceptron:
         self.eta = eta
         self.n_iter = n_iter
 
+    def net_input(self, X):
+        """Calculate net input"""
+        return np.dot(X, self.w_[1:]) + self.w_[0]
+
+    def predict(self, X):
+        """Return class label after unit step"""
+        return np.where(self.net_input(X) >= 0.0, 1, -1)
+
     def fit(self, X, y):
         """Fit training data.
 
@@ -40,7 +48,7 @@ class Perceptron:
         self.w_ = np.zeros(1 + X.shape[1])
         self.errors_ = []
 
-        for _ in range(self.n_iter_):
+        for _ in range(self.n_iter):
             errors = 0
             for xi, target in zip(X, y):
                 update = self.eta * (target - self.predict(xi))
@@ -49,11 +57,3 @@ class Perceptron:
                 errors += int(update != 0.0)
             self.errors_.append(errors)
         return self
-
-        def net_input(self, X):
-            """Calculate net input"""
-            return np.dot(X, self.w_[1:]) + self.w_[0]
-
-        def predict(self, X):
-            """Return class label after unit step"""
-            return np.where(self.net_input(X) >= 0.0, 1, -1)
